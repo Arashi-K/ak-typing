@@ -9,7 +9,6 @@ export type UpdateGrade = {
 export type UpdateCategory = {
   title: string;
   description: string;
-  condition: (playData: PlayData) => boolean;
   updateGrades: UpdateGrade[];
 };
 
@@ -26,7 +25,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementGameTime: {
     title: 'ゲーム時間',
     description: '1ゲームの制限時間を伸ばします',
-    condition: (_: PlayData) => true,
     updateGrades: [
       {
         text: 'ゲーム時間 5秒 -> 6秒',
@@ -158,7 +156,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementKeyCollectPoint: {
     title: '正タイプポイント',
     description: '正しいタイプをすると加算されるポイントを上げます',
-    condition: (_: PlayData) => true,
     updateGrades: [
       {
         text: '正タイプポイント 1 -> 2',
@@ -215,7 +212,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementWordCollectPoint: {
     title: 'ワード完成ポイント',
     description: '1ワードを完成すると加算されるポイントを上げます',
-    condition: (playData: PlayData) => playData.updateGrades.incrementKeyCollectPoint >= 2,
     updateGrades: [
       {
         text: 'ワード完成ポイント 0 -> 20',
@@ -272,7 +268,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementLineCollectPoint: {
     title: 'ライン完成ポイント',
     description: '1ラインを完成すると加算されるポイントを上げます',
-    condition: (playData: PlayData) => playData.updateGrades.incrementWordCollectPoint >= 2,
     updateGrades: [
       {
         text: 'ライン完成ポイント 0 -> 200',
@@ -329,7 +324,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementKeyWrongPointRate: {
     title: '誤タイプペナルティ',
     description: '間違ったタイプをすると与えられるポイントペナルティを減らします',
-    condition: (_: PlayData) => true,
     updateGrades: [
       {
         text: '誤タイプペナルティ 10 -> 9',
@@ -386,7 +380,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementMaxGameLevel: {
     title: 'ゲームレベル',
     description: 'プレイできるゲームレベルを上げます',
-    condition: (_: PlayData) => true,
     updateGrades: [
       {
         text: 'レベル2を解放',
@@ -413,7 +406,6 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   unlockWpm: {
     title: 'WPM計測を解放',
     description: 'ゲーム結果でWPMを表示します',
-    condition: (_: PlayData) => true,
     updateGrades: [
       {
         text: 'ゲーム結果でWPMを表示',

@@ -2,7 +2,7 @@
   <div class="scene">
     <div class="window main">
       <div class="info_area">
-        <div>{{ currentPlayData.point.toLocaleString() }}</div>
+        <div>現在のポイント: {{ currentPlayData.point.toLocaleString() }}</div>
       </div>
       <div class="main_area">
         <div
@@ -11,6 +11,11 @@
           class="menu"
           :class="[menu.style, { current: menuIndex == currentMenuIndex }]"
         >> {{ menu.text }}</div>
+      </div>
+      <div class="guide_area">
+        <div class="guide">上に移動: k/↑</div>
+        <div class="guide">下に移動: j/↓</div>
+        <div class="guide">決定: Space/Enter</div>
       </div>
     </div>
   </div>
@@ -37,21 +42,21 @@ type Menu = {
 };
 const menuList: Menu[] = [
   {
-    text: 'Play game',
+    text: 'ゲームをプレイ',
     onSelect: () => {
       props.toLevelScene();
     },
     style: StyleManager.style(),
   },
   {
-    text: 'Update',
+    text: 'アップデート',
     onSelect: () => {
       props.toUpdateScene();
     },
     style: StyleManager.style(),
   },
   {
-    text: 'Back to title',
+    text: 'タイトルに戻る',
     onSelect: () => {
       props.toTitleScene();
     },
@@ -108,6 +113,14 @@ KeyManager.start((inputKey: string) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.guide_area {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid $color_white;
+  font-size: 14px;
 }
 
 .current {

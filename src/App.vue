@@ -35,7 +35,9 @@
     />
     <PlayScene
       v-if="currentScene == 'PlayScene'"
+      :key="playSceneKey"
       :toMenuScene="toScene('MenuScene')"
+      :resetPlayScene="resetPlayScene"
     />
   </div>
 </template>
@@ -65,6 +67,11 @@ const handleClickBGMVolume = () => {
     currentPlayData.bgmVolume = true;
     AudioManager.startBGM();
   }
+};
+
+const playSceneKey = ref<string>(crypto.randomUUID());
+const resetPlayScene = () => {
+  playSceneKey.value = crypto.randomUUID();
 };
 </script>
 

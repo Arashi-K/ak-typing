@@ -4,7 +4,7 @@
       <div class="info_area">
         <div class="info_area_level">Level{{ currentPlayData.currentGameLevel.level }}</div>
         <div class="info_area_time">{{ (countDown.remainingTime.value / 1000).toFixed(1) }}</div>
-        <div class="info_area_point">{{ previousPoint.toLocaleString() }} + {{ additionalPoint.toLocaleString() }}</div>
+        <div class="info_area_point">現在のポイント: {{ previousPoint.toLocaleString() }} + {{ additionalPoint.toLocaleString() }}</div>
       </div>
       <div class="main_area">
         <div
@@ -44,23 +44,33 @@
           </div>
         </div>
       </div>
+      <div class="guide_area">
+        <div class="guide">メニュー: Esc</div>
+      </div>
     </div>
     <div
       v-if="isPaused"
       class="window pause"
     >
-      <div
-        v-for="(menu, menuIndex) in pauseMenuList"
-        :key="menuIndex"
-        class="pause_menu"
-        :class="[menu.style, { current: menuIndex == currentPauseMenuIndex }]"
-      >> {{ menu.text }}</div>
+      <div class="main_area">
+        <div
+          v-for="(menu, menuIndex) in pauseMenuList"
+          :key="menuIndex"
+          class="pause_menu"
+          :class="[menu.style, { current: menuIndex == currentPauseMenuIndex }]"
+        >> {{ menu.text }}</div>
+      </div>
+      <div class="guide_area">
+        <div class="guide">上に移動: k/↑</div>
+        <div class="guide">下に移動: j/↓</div>
+        <div class="guide">決定: Space/Enter</div>
+      </div>
     </div>
     <div
       v-if="!isRunningGame"
       class="window result"
     >
-      <div>Result</div>
+      <div>結果</div>
       <div>現在のポイント: {{ previousPoint.toLocaleString() }} -> {{ currentPlayData.point.toLocaleString() }}</div>
       <template v-if="currentPlayData.unlockedWpm">
         <div>正タイプ: {{ collectTypeCount }}</div>
@@ -68,7 +78,7 @@
         <div>正タイプ率: {{ (collectTypeCount / (collectTypeCount + wrongTypeCount) * 100).toFixed(1) }}%</div>
         <div>WPM: {{ ((collectTypeCount + wrongTypeCount) / currentPlayData.gameTime * 60000).toFixed(1) }}</div>
       </template>
-      <div class="result_menu" :class="resultMenuStyle">> Press space to back to menu</div>
+      <div class="result_menu" :class="resultMenuStyle">> スペースキーを押してください</div>
     </div>
   </div>
 </template>
@@ -83,6 +93,7 @@ import { currentPlayData } from '@/resources/play_data';
 
 interface Props {
   toMenuScene: () => void;
+  resetPlayScene: () => void;
 };
 const props = defineProps<Props>();
 
@@ -93,7 +104,7 @@ type Menu = {
 };
 const pauseMenuList: Menu[] = [
   {
-    text: 'Close menu',
+    text: 'ゲームを再開',
     onSelect: () => {
       isPaused.value = false;
       currentPauseMenuIndex.value = 0;
@@ -105,7 +116,14 @@ const pauseMenuList: Menu[] = [
     style: StyleManager.style(),
   },
   {
-    text: 'Quit this game',
+    text: 'ゲームをやり直す',
+    onSelect: () => {
+      props.resetPlayScene();
+    },
+    style: StyleManager.style(),
+  },
+  {
+    text: 'ゲームを終了',
     onSelect: () => {
       props.toMenuScene();
     },
@@ -312,6 +330,14 @@ KeyManager.start((inputKey: string) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.guide_area {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid $color_white;
+  font-size: 14px;
 }
 
 .line {

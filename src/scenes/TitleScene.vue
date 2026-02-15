@@ -2,7 +2,7 @@
   <div class="scene">
     <div class="window main">
       <div class="title">AK Typing</div>
-      <div class="subtitle" :class="subtitleStyle">> Press Space To Start</div>
+      <div class="subtitle" :class="subtitleStyle">> スペースキーを押してください</div>
     </div>
   </div>
 </template>

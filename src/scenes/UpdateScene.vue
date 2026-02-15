@@ -2,7 +2,7 @@
   <div class="scene">
     <div class="window main">
       <div class="info_area">
-        <div>{{ currentPlayData.point.toLocaleString() }}</div>
+        <div>現在のポイント: {{ currentPlayData.point.toLocaleString() }}</div>
       </div>
       <div class="main_area">
         <div class="menu_area">
@@ -15,16 +15,27 @@
         </div>
         <div class="update_area">
           <template v-if="currentUpdateKey != null">
-            <div>{{ currentUpdateCategory!.description }}</div>
-            <template v-if="currentUpdateCategoryCompleted">
-              <div>すべてのアップデートを完了しています</div>
-            </template>
-            <template v-else>
-              <div>アップデート内容: {{ currentUpdateGrade!.text }}</div>
-              <div>必要ポイント: {{ currentUpdateGrade!.requirePoint.toLocaleString() }}</div>
-            </template>
+            <div class="description_area">
+              <div>{{ currentUpdateCategory!.description }}</div>
+            </div>
+            <div class="grade_area">
+              <template v-if="currentUpdateCategoryCompleted">
+                <div>すべてのアップデートを完了しています</div>
+              </template>
+              <template v-else>
+                <div>アップデート内容:</div>
+                <div>{{ currentUpdateGrade!.text }}</div>
+                <div />
+                <div>必要ポイント: {{ currentUpdateGrade!.requirePoint.toLocaleString() }}</div>
+              </template>
+            </div>
           </template>
         </div>
+      </div>
+      <div class="guide_area">
+        <div class="guide">上に移動: k/↑</div>
+        <div class="guide">下に移動: j/↓</div>
+        <div class="guide">決定: Space/Enter</div>
       </div>
     </div>
   </div>
@@ -51,7 +62,7 @@ type Menu = {
   style: StyleState;
 };
 const menuList = computed<Menu[]>(() => [
-  ...Object.entries(updateCategories).filter(([_, category]) => category.condition(currentPlayData)).map(([key, category]) => ({
+  ...Object.entries(updateCategories).map(([key, category]) => ({
     text: `${category.title} (${currentPlayData.updateGrades[key as UpdateKeys]}/${category.updateGrades.length})`,
     onPoint: () => {
       currentUpdateKey.value = key as UpdateKeys;
@@ -75,7 +86,7 @@ const menuList = computed<Menu[]>(() => [
     style: StyleManager.style(),
   })),
   {
-    text: 'Back to menu',
+    text: 'メニューに戻る',
     onPoint: () => {
       currentUpdateKey.value = null;
     },
@@ -172,6 +183,30 @@ KeyManager.start((inputKey: string) => {
   display: flex;
   flex-direction: column;
   gap: 12px;
+}
+
+.description_area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+  border-bottom: 1px solid $color_white;
+}
+
+.grade_area {
+  flex: 3;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  font-size: 14px;
+}
+
+.guide_area {
+  display: flex;
+  gap: 16px;
+  padding-top: 12px;
+  border-top: 1px solid $color_white;
   font-size: 14px;
 }
 
