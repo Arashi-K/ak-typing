@@ -1,6 +1,22 @@
 import { BuildData, type Level } from "../build_data";
 import { updateCategories, type UpdateKeys } from "../build_data/updates";
 
+const secret = 'iauhrpijspofiwpjbrepiwnapfiojpoiajroijajwp';
+const xorCipher = (str: string, key: string): string => {
+  let result = '';
+  for (let i = 0; i < str.length; i++) {
+    const code = str.charCodeAt(i) ^ key.charCodeAt(i % key.length);
+    result += String.fromCharCode(code);
+  }
+  return result;
+};
+const encrypt = (str: string): string => {
+  return btoa(xorCipher(str, secret));
+};
+const decrypt = (str: string): string => {
+  return xorCipher(atob(str), secret);
+};
+
 const localStorageKey = 'playData';
 
 export type PlayData = {
@@ -38,16 +54,15 @@ const initPlayDataCache = (): PlayData => {
 const LocalCacheManager = {
   getCache(): PlayData {
     const currentCache = localStorage.getItem(localStorageKey);
-    if (currentCache != null) {
-      return JSON.parse(currentCache) as PlayData;
-    } else {
-      const currentData = initPlayDataCache();
-      localStorage.setItem(localStorageKey, JSON.stringify(currentData));
-      return currentData;
-    }
+    const currentData = Object.assign(
+      initPlayDataCache(),
+      currentCache != null ? JSON.parse(decrypt(currentCache)) : {},
+    ) as PlayData;
+    localStorage.setItem(localStorageKey, encrypt(JSON.stringify(currentData)));
+    return currentData
   },
   setCache(playData: PlayData) {
-    localStorage.setItem(localStorageKey, JSON.stringify(playData));
+    localStorage.setItem(localStorageKey, encrypt(JSON.stringify(playData)));
   },
 };
 
