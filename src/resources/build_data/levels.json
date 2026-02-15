@@ -1,0 +1,22 @@
+[
+  {
+    "level": 1,
+    "lineCount": 1
+  },
+  {
+    "level": 2,
+    "lineCount": 2
+  },
+  {
+    "level": 3,
+    "lineCount": 4
+  },
+  {
+    "level": 4,
+    "lineCount": 8
+  },
+  {
+    "level": 5,
+    "lineCount": 16
+  }
+]
