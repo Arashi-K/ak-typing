@@ -80,7 +80,7 @@ const resetPlayScene = () => {
   width: 100vw;
   height: 100vh;
   background-color: $color_black;
-  padding: 120px 150px;
+  padding: 120px calc(50vw - 400px);
   box-sizing: border-box;
 }
 
