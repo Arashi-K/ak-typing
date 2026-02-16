@@ -39,7 +39,7 @@ const initPlayDataCache = (): PlayData => {
     seVolume: true,
     bgmVolume: true,
     point: 0,
-    maxGameLevel: 5,
+    maxGameLevel: 1,
     gameTime: 5000,
     keyCollectPoint: 1,
     wordCollectPoint: 0,
