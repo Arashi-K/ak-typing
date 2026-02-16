@@ -19,6 +19,24 @@ const decrypt = (str: string): string => {
 
 const localStorageKey = 'playData';
 
+export type Statistics = {
+  collectTypeCount: number;
+  wrongTypeCount: number;
+  collectWordCount: number;
+  collectLineCount: number;
+  totalGameTime: number;
+  maxWpm: number | null;
+  totalPoint: number;
+  totalUsedPoint: number;
+  levels: {
+    level: number;
+    clearCount: number;
+    missCount: number;
+    totalGameTime: number;
+    minGameTime: number | null;
+  }[];
+};
+
 export type PlayData = {
   seVolume: boolean;
   bgmVolume: boolean;
@@ -30,8 +48,10 @@ export type PlayData = {
   lineCollectPoint: number;
   keyWrongPointRate: number;
   unlockedWpm: boolean,
+  unlockedStatistics: boolean,
   currentGameLevel: Level;
   updateGrades: { [K in UpdateKeys]: number };
+  statistics: Statistics;
 };
 
 const initPlayDataCache = (): PlayData => {
@@ -46,18 +66,36 @@ const initPlayDataCache = (): PlayData => {
     lineCollectPoint: 0,
     keyWrongPointRate: 10,
     unlockedWpm: false,
+    unlockedStatistics: false,
     currentGameLevel: BuildData.levels[0] as Level,
     updateGrades: objectTransformValues(updateCategories, (_) => 0),
+    statistics: {
+      collectTypeCount: 0,
+      wrongTypeCount: 0,
+      collectWordCount: 0,
+      collectLineCount: 0,
+      totalGameTime: 0,
+      maxWpm: null,
+      totalPoint: 0,
+      totalUsedPoint: 0,
+      levels: BuildData.levels.map(level => ({
+        level: level.level,
+        clearCount: 0,
+        missCount: 0,
+        totalGameTime: 0,
+        minGameTime: null,
+      })),
+    },
   };
 };
 
 const LocalCacheManager = {
   getCache(): PlayData {
     const currentCache = localStorage.getItem(localStorageKey);
-    const currentData = Object.assign(
+    const currentData = objectDeepMerge(
       initPlayDataCache(),
       currentCache != null ? JSON.parse(decrypt(currentCache)) : {},
-    ) as PlayData;
+    );
     localStorage.setItem(localStorageKey, encrypt(JSON.stringify(currentData)));
     return currentData
   },

@@ -23,6 +23,7 @@
       :toTitleScene="toScene('TitleScene')"
       :toUpdateScene="toScene('UpdateScene')"
       :toLevelScene="toScene('LevelScene')"
+      :toStatisticsScene="toScene('StatisticsScene')"
     />
     <UpdateScene
       v-if="currentScene == 'UpdateScene'"
@@ -39,6 +40,10 @@
       :toMenuScene="toScene('MenuScene')"
       :resetPlayScene="resetPlayScene"
     />
+    <StatisticsScene
+      v-if="currentScene == 'StatisticsScene'"
+      :toMenuScene="toScene('MenuScene')"
+    />
   </div>
 </template>
 
@@ -48,10 +53,11 @@ import { currentPlayData } from './resources/play_data';
 import LevelScene from './scenes/LevelScene.vue';
 import MenuScene from './scenes/MenuScene.vue';
 import PlayScene from './scenes/PlayScene.vue';
+import StatisticsScene from './scenes/StatisticsScene.vue';
 import TitleScene from './scenes/TitleScene.vue';
 import UpdateScene from './scenes/UpdateScene.vue';
 
-type Scenes = 'TitleScene' | 'MenuScene' | 'UpdateScene' | 'LevelScene' | 'PlayScene'
+type Scenes = 'TitleScene' | 'MenuScene' | 'UpdateScene' | 'LevelScene' | 'PlayScene' | 'StatisticsScene';
 
 const currentScene = ref<Scenes>('TitleScene');
 const toScene = (scene: Scenes) => () => currentScene.value = scene;

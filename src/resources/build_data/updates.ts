@@ -20,6 +20,7 @@ export type UpdateKeys
   | 'incrementKeyWrongPointRate'
   | 'incrementMaxGameLevel'
   | 'unlockWpm'
+  | 'unlockStatistics'
 
 export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
   incrementGameTime: {
@@ -409,8 +410,19 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
     updateGrades: [
       {
         text: 'ゲーム結果でWPMを表示',
-        requirePoint: 100000,
+        requirePoint: 10000,
         process: (playData: PlayData) => playData.unlockedWpm = true,
+      },
+    ],
+  },
+  unlockStatistics: {
+    title: '統計を解放',
+    description: 'メニュー画面に統計を追加します',
+    updateGrades: [
+      {
+        text: 'メニュー画面に統計を追加',
+        requirePoint: 100000,
+        process: (playData: PlayData) => playData.unlockedStatistics = true,
       },
     ],
   },

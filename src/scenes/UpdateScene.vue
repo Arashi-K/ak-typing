@@ -76,6 +76,9 @@ const menuList = computed<Menu[]>(() => [
         const updateGrades = currentPlayData.updateGrades;
         updateGrades[currentUpdateKey.value!] += 1;
         currentPlayData.updateGrades = updateGrades;
+        const statistics = { ...currentPlayData.statistics };
+        statistics.totalUsedPoint += requirePoint;
+        currentPlayData.statistics = statistics;
       }
     },
     selectable: () => {

@@ -76,7 +76,7 @@
         <div>正タイプ: {{ collectTypeCount }}</div>
         <div>誤タイプ: {{ wrongTypeCount }}</div>
         <div>正タイプ率: {{ (collectTypeCount / (collectTypeCount + wrongTypeCount) * 100).toFixed(1) }}%</div>
-        <div>WPM: {{ ((collectTypeCount + wrongTypeCount) / currentPlayData.gameTime * 60000).toFixed(1) }}</div>
+        <div>WPM: {{ wpm.toFixed(1) }}</div>
       </template>
       <div class="result_menu" :class="resultMenuStyle">> スペースキーを押してください</div>
     </div>
@@ -139,11 +139,17 @@ const previousPoint = currentPlayData.point;
 const additionalPoint = ref<number>(0);
 const collectTypeCount = ref<number>(0);
 const wrongTypeCount = ref<number>(0);
+const collectWordCount = ref<number>(0);
+const collectLineCount = ref<number>(0);
 const resultMenuStyle = StyleManager.style();
 const countDown = TimeManager.useCountdown(currentPlayData.gameTime, () => {
+  target.value.status = 'wrong';
   isRunningGame.value = false;
   currentPlayData.point += additionalPoint.value;
+  updateStatistics();
 });
+const playTime = computed(() => currentPlayData.gameTime - countDown.remainingTime.value);
+const wpm = computed(() => (collectTypeCount.value + wrongTypeCount.value) / playTime.value * 60000);
 countDown.start();
 
 type Key = {
@@ -193,6 +199,26 @@ const target = ref<Target>({
 const currentLineIndex = ref<number>(0);
 const currentWordIndex = ref<number>(0);
 const currentKeyIndex = ref<number>(0);
+
+const updateStatistics = () => {
+  const statistics = { ...currentPlayData.statistics };
+  statistics.collectTypeCount += collectTypeCount.value;
+  statistics.wrongTypeCount += wrongTypeCount.value;
+  statistics.collectWordCount += collectWordCount.value;
+  statistics.collectLineCount += collectLineCount.value;
+  statistics.totalGameTime += playTime.value;
+  statistics.maxWpm = Math.max(statistics.maxWpm ?? 0, wpm.value);
+  statistics.totalPoint += additionalPoint.value;
+  const levels = statistics.levels;
+  const level = levels.find(level => level.level == currentPlayData.currentGameLevel.level);
+  if (level != null) {
+    if (target.value.status == 'collect') level.clearCount += 1;
+    if (target.value.status == 'wrong') level.missCount += 1;
+    level.totalGameTime += playTime.value;
+    level.minGameTime = Math.min(level.minGameTime ?? playTime.value, playTime.value);
+  }
+  currentPlayData.statistics = statistics;
+};
 
 KeyManager.start((inputKey: string) => {
   if (!isRunningGame.value) {
@@ -261,12 +287,14 @@ KeyManager.start((inputKey: string) => {
       currentWord.status = 'collect';
       currentKeyIndex.value = 0
       currentWordIndex.value += 1;
+      collectWordCount.value += 1;
     }
     if (currentWordIndex.value == currentWords.length) {
       additionalPoint.value += currentPlayData.lineCollectPoint;
       currentLine.status = 'collect';
       currentWordIndex.value = 0
       currentLineIndex.value += 1;
+      collectLineCount.value += 1;
     }
     target.value = {
       lines: currentLines,
@@ -276,6 +304,7 @@ KeyManager.start((inputKey: string) => {
       countDown.stop();
       isRunningGame.value = false;
       currentPlayData.point += additionalPoint.value;
+      updateStatistics();
     }
   }
 });

@@ -32,6 +32,7 @@ interface Props {
   toTitleScene: () => void;
   toUpdateScene: () => void;
   toLevelScene: () => void;
+  toStatisticsScene: () => void;
 };
 const props = defineProps<Props>();
 
@@ -55,6 +56,13 @@ const menuList: Menu[] = [
     },
     style: StyleManager.style(),
   },
+  ...(currentPlayData.unlockedStatistics ? [{
+    text: '統計',
+    onSelect: () => {
+      props.toStatisticsScene();
+    },
+    style: StyleManager.style(),
+  }] : []),
   {
     text: 'タイトルに戻る',
     onSelect: () => {

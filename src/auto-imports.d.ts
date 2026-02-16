@@ -11,6 +11,7 @@ declare global {
   const computed: typeof import('vue').computed
   const createApp: typeof import('vue').createApp
   const customRef: typeof import('vue').customRef
+  const deepCopy: typeof import('./utils/object_utils').deepCopy
   const defineAsyncComponent: typeof import('vue').defineAsyncComponent
   const defineComponent: typeof import('vue').defineComponent
   const effectScope: typeof import('vue').effectScope
@@ -27,6 +28,7 @@ declare global {
   const isShallow: typeof import('vue').isShallow
   const markRaw: typeof import('vue').markRaw
   const nextTick: typeof import('vue').nextTick
+  const objectDeepMerge: typeof import('./utils/object_utils').objectDeepMerge
   const objectTransformValues: typeof import('./utils/object_utils').objectTransformValues
   const onActivated: typeof import('vue').onActivated
   const onBeforeMount: typeof import('vue').onBeforeMount
