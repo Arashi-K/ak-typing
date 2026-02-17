@@ -115,7 +115,7 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
       },
       {
         text: 'ゲーム時間 22秒 -> 23秒',
-        requirePoint: 3000000,
+        requirePoint: 10000000,
         process: (playData: PlayData) => playData.gameTime = 23000,
       },
       {
@@ -125,7 +125,7 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
       },
       {
         text: 'ゲーム時間 24秒 -> 25秒',
-        requirePoint: 100000000,
+        requirePoint: 10000000,
         process: (playData: PlayData) => playData.gameTime = 25000,
       },
       {
