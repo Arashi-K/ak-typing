@@ -25,7 +25,7 @@ export type Statistics = {
   collectWordCount: number;
   collectLineCount: number;
   totalGameTime: number;
-  maxWpm: number | null;
+  maxKpm: number | null;
   totalPoint: number;
   totalUsedPoint: number;
   levels: {
@@ -47,7 +47,7 @@ export type PlayData = {
   wordCollectPoint: number;
   lineCollectPoint: number;
   keyWrongPointRate: number;
-  unlockedWpm: boolean,
+  unlockedKpm: boolean,
   unlockedReplay: boolean,
   unlockedStatistics: boolean,
   currentGameLevel: Level;
@@ -66,7 +66,7 @@ const initPlayDataCache = (): PlayData => {
     wordCollectPoint: 0,
     lineCollectPoint: 0,
     keyWrongPointRate: 10,
-    unlockedWpm: false,
+    unlockedKpm: false,
     unlockedReplay: false,
     unlockedStatistics: false,
     currentGameLevel: BuildData.levels[0] as Level,
@@ -77,7 +77,7 @@ const initPlayDataCache = (): PlayData => {
       collectWordCount: 0,
       collectLineCount: 0,
       totalGameTime: 0,
-      maxWpm: null,
+      maxKpm: null,
       totalPoint: 0,
       totalUsedPoint: 0,
       levels: BuildData.levels.map(level => ({

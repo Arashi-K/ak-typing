@@ -19,7 +19,7 @@ export type UpdateKeys
   | 'incrementLineCollectPoint'
   | 'incrementKeyWrongPointRate'
   | 'incrementMaxGameLevel'
-  | 'unlockWpm'
+  | 'unlockKpm'
   | 'unlockReplay'
   | 'unlockStatistics'
 
@@ -405,14 +405,14 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
       },
     ],
   },
-  unlockWpm: {
-    title: 'WPM計測を解放',
-    description: 'ゲーム結果でWPMを表示します',
+  unlockKpm: {
+    title: 'KPM計測を解放',
+    description: 'ゲーム結果でKPMを表示します',
     updateGrades: [
       {
-        text: 'ゲーム結果でWPMを表示',
+        text: 'ゲーム結果でKPMを表示',
         requirePoint: 10000,
-        process: (playData: PlayData) => playData.unlockedWpm = true,
+        process: (playData: PlayData) => playData.unlockedKpm = true,
       },
     ],
   },

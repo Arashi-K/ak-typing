@@ -73,11 +73,11 @@
       <div class="result_area">
         <div>結果</div>
         <div>現在のポイント: {{ previousPoint.toLocaleString() }} -> {{ currentPlayData.point.toLocaleString() }}</div>
-        <template v-if="currentPlayData.unlockedWpm">
+        <template v-if="currentPlayData.unlockedKpm">
           <div>正タイプ: {{ collectTypeCount }}</div>
           <div>誤タイプ: {{ wrongTypeCount }}</div>
           <div>正タイプ率: {{ collectTypeCount + wrongTypeCount != 0 ? (collectTypeCount / (collectTypeCount + wrongTypeCount) * 100).toFixed(1) : '-' }}%</div>
-          <div>WPM: {{ wpm.toFixed(1) }}</div>
+          <div>KPM: {{ kpm.toFixed(1) }}</div>
         </template>
       </div>
       <div class="guide_area">
@@ -153,7 +153,7 @@ const countDown = TimeManager.useCountdown(currentPlayData.gameTime, () => {
   updateStatistics();
 });
 const playTime = computed(() => currentPlayData.gameTime - countDown.remainingTime.value);
-const wpm = computed(() => (collectTypeCount.value + wrongTypeCount.value) / playTime.value * 60000);
+const kpm = computed(() => collectTypeCount.value / playTime.value * 60000);
 countDown.start();
 
 type Key = {
@@ -211,7 +211,7 @@ const updateStatistics = () => {
   statistics.collectWordCount += collectWordCount.value;
   statistics.collectLineCount += collectLineCount.value;
   statistics.totalGameTime += playTime.value;
-  statistics.maxWpm = Math.max(statistics.maxWpm ?? 0, wpm.value);
+  statistics.maxKpm = Math.max(statistics.maxKpm ?? 0, kpm.value);
   statistics.totalPoint += additionalPoint.value;
   const levels = statistics.levels;
   const level = levels.find(level => level.level == currentPlayData.currentGameLevel.level);

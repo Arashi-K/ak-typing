@@ -39,12 +39,12 @@
           </div>
           <div class="point_area">
             <div class="statistics">
-              <div class="statistics_label">平均WPM:</div>
+              <div class="statistics_label">平均KPM:</div>
               <div class="statistics_value">{{ statistics.totalGameTime != 0 ? toFloatStr((statistics.collectTypeCount + statistics.wrongTypeCount) / statistics.totalGameTime * 60000) : '-' }}</div>
             </div>
             <div class="statistics">
-              <div class="statistics_label">最高WPM:</div>
-              <div class="statistics_value">{{ statistics.maxWpm != null ? toFloatStr(statistics.maxWpm) : '-' }}</div>
+              <div class="statistics_label">最高KPM:</div>
+              <div class="statistics_value">{{ statistics.maxKpm != null ? toFloatStr(statistics.maxKpm) : '-' }}</div>
             </div>
             <div class="statistics">
               <div class="statistics_label">合計獲得ポイント:</div>
