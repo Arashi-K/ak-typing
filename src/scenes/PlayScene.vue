@@ -82,7 +82,7 @@
       </div>
       <div class="guide_area">
         <div class="guide">メニューに戻る: Space</div>
-        <div v-if="currentPlayData.unlockedReplay" class="guide">再プレイ: r</div>
+        <div v-if="currentPlayData.unlockedReplay" class="guide">再プレイ: Enter</div>
       </div>
     </div>
   </div>
@@ -229,7 +229,7 @@ KeyManager.start((inputKey: string) => {
     if (KeyManager.isSpace(inputKey)) {
       AudioManager.playSE(SoundEffects.select);
       props.toMenuScene();
-    } else if (currentPlayData.unlockedReplay && inputKey == 'r') {
+    } else if (currentPlayData.unlockedReplay && KeyManager.isEnter(inputKey)) {
       AudioManager.playSE(SoundEffects.select);
       props.resetPlayScene();
     }
