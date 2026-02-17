@@ -91,7 +91,7 @@
         </div>
       </div>
       <div class="guide_area">
-        <div class="guide" :class="subtitleStyle">> スペースキーでメニューに戻る</div>
+        <div class="guide">メニューに戻る: Space</div>
       </div>
     </div>
   </div>
@@ -99,8 +99,7 @@
 
 <script setup lang="ts">
 import { KeyManager } from '@/lib/key_manager';
-import { AudioManager, BackGroundMusics, SoundEffects } from '@/lib/audio_manager';
-import { StyleManager } from '@/lib/style_manager';
+import { AudioManager, SoundEffects } from '@/lib/audio_manager';
 import { TimeManager } from '@/lib/time_manager';
 import { currentPlayData } from '@/resources/play_data';
 
@@ -109,7 +108,6 @@ interface Props {
 };
 
 const props = defineProps<Props>();
-const subtitleStyle = StyleManager.style();
 
 const statistics = computed(() => currentPlayData.statistics);
 
@@ -119,18 +117,10 @@ const toFloatStr = (num: number) => Number(num.toFixed(1)).toLocaleString();
 KeyManager.start((inputKey: string) => {
   if (KeyManager.isSpace(inputKey)) {
     AudioManager.playSE(SoundEffects.select);
-    StyleManager.add(subtitleStyle, 'blink');
     KeyManager.deactivate();
     TimeManager.reserve({
-      [600]: () => {
-        StyleManager.remove(subtitleStyle, 'blink');
-      },
       [800]: () => {
         KeyManager.activate();
-        if (!AudioManager.isPlayingBGM()) {
-          AudioManager.changeBGM(BackGroundMusics.scene1);
-          AudioManager.startBGM();
-        }
         props.toMenuScene();
       },
     });
@@ -212,7 +202,6 @@ KeyManager.start((inputKey: string) => {
 
 .guide_area {
   display: flex;
-  justify-content: center;
   gap: 16px;
   padding-top: 12px;
   border-top: 1px solid $color_white;
