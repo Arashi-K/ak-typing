@@ -70,15 +70,20 @@
       v-if="!isRunningGame"
       class="window result"
     >
-      <div>結果</div>
-      <div>現在のポイント: {{ previousPoint.toLocaleString() }} -> {{ currentPlayData.point.toLocaleString() }}</div>
-      <template v-if="currentPlayData.unlockedWpm">
-        <div>正タイプ: {{ collectTypeCount }}</div>
-        <div>誤タイプ: {{ wrongTypeCount }}</div>
-        <div>正タイプ率: {{ (collectTypeCount / (collectTypeCount + wrongTypeCount) * 100).toFixed(1) }}%</div>
-        <div>WPM: {{ wpm.toFixed(1) }}</div>
-      </template>
-      <div class="result_menu" :class="resultMenuStyle">> スペースキーを押してください</div>
+      <div class="result_area">
+        <div>結果</div>
+        <div>現在のポイント: {{ previousPoint.toLocaleString() }} -> {{ currentPlayData.point.toLocaleString() }}</div>
+        <template v-if="currentPlayData.unlockedWpm">
+          <div>正タイプ: {{ collectTypeCount }}</div>
+          <div>誤タイプ: {{ wrongTypeCount }}</div>
+          <div>正タイプ率: {{ collectTypeCount + wrongTypeCount != 0 ? (collectTypeCount / (collectTypeCount + wrongTypeCount) * 100).toFixed(1) : '-' }}%</div>
+          <div>WPM: {{ wpm.toFixed(1) }}</div>
+        </template>
+      </div>
+      <div class="guide_area">
+        <div class="guide">メニューに戻る: Space</div>
+        <div v-if="currentPlayData.unlockedReplay" class="guide">再プレイ: r</div>
+      </div>
     </div>
   </div>
 </template>
@@ -141,7 +146,6 @@ const collectTypeCount = ref<number>(0);
 const wrongTypeCount = ref<number>(0);
 const collectWordCount = ref<number>(0);
 const collectLineCount = ref<number>(0);
-const resultMenuStyle = StyleManager.style();
 const countDown = TimeManager.useCountdown(currentPlayData.gameTime, () => {
   target.value.status = 'wrong';
   isRunningGame.value = false;
@@ -224,15 +228,20 @@ KeyManager.start((inputKey: string) => {
   if (!isRunningGame.value) {
     if (KeyManager.isSpace(inputKey)) {
       AudioManager.playSE(SoundEffects.select);
-      StyleManager.add(resultMenuStyle, 'blink');
       KeyManager.deactivate();
       TimeManager.reserve({
-        [600]: () => {
-          StyleManager.remove(resultMenuStyle, 'blink');
-        },
         [800]: () => {
           KeyManager.activate();
           props.toMenuScene();
+        },
+      });
+    } else if (currentPlayData.unlockedReplay && inputKey == 'r') {
+      AudioManager.playSE(SoundEffects.select);
+      KeyManager.deactivate();
+      TimeManager.reserve({
+        [800]: () => {
+          KeyManager.activate();
+          props.resetPlayScene();
         },
       });
     }
@@ -336,7 +345,6 @@ KeyManager.start((inputKey: string) => {
   height: 200px;
   display: flex;
   flex-direction: column;
-  align-items: center;
   gap: 12px;
   position: fixed;
   top: 50vh;
@@ -361,7 +369,18 @@ KeyManager.start((inputKey: string) => {
   gap: 12px;
 }
 
+.result_area {
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
 .guide_area {
+  width: 100%;
   display: flex;
   gap: 16px;
   padding-top: 12px;

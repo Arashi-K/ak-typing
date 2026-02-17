@@ -48,6 +48,7 @@ export type PlayData = {
   lineCollectPoint: number;
   keyWrongPointRate: number;
   unlockedWpm: boolean,
+  unlockedReplay: boolean,
   unlockedStatistics: boolean,
   currentGameLevel: Level;
   updateGrades: { [K in UpdateKeys]: number };
@@ -66,6 +67,7 @@ const initPlayDataCache = (): PlayData => {
     lineCollectPoint: 0,
     keyWrongPointRate: 10,
     unlockedWpm: false,
+    unlockedReplay: false,
     unlockedStatistics: false,
     currentGameLevel: BuildData.levels[0] as Level,
     updateGrades: objectTransformValues(updateCategories, (_) => 0),

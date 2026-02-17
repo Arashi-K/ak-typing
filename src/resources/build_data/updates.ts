@@ -20,6 +20,7 @@ export type UpdateKeys
   | 'incrementKeyWrongPointRate'
   | 'incrementMaxGameLevel'
   | 'unlockWpm'
+  | 'unlockReplay'
   | 'unlockStatistics'
 
 export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
@@ -412,6 +413,17 @@ export const updateCategories: { [K in UpdateKeys]: UpdateCategory } = {
         text: 'ゲーム結果でWPMを表示',
         requirePoint: 10000,
         process: (playData: PlayData) => playData.unlockedWpm = true,
+      },
+    ],
+  },
+  unlockReplay: {
+    title: '再プレイを解放',
+    description: 'ゲーム終了後にメニューに戻らず再プレイできるようになります',
+    updateGrades: [
+      {
+        text: 'ゲーム終了後に再プレイを解放',
+        requirePoint: 50000,
+        process: (playData: PlayData) => playData.unlockedReplay = true,
       },
     ],
   },
