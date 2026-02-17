@@ -228,22 +228,10 @@ KeyManager.start((inputKey: string) => {
   if (!isRunningGame.value) {
     if (KeyManager.isSpace(inputKey)) {
       AudioManager.playSE(SoundEffects.select);
-      KeyManager.deactivate();
-      TimeManager.reserve({
-        [800]: () => {
-          KeyManager.activate();
-          props.toMenuScene();
-        },
-      });
+      props.toMenuScene();
     } else if (currentPlayData.unlockedReplay && inputKey == 'r') {
       AudioManager.playSE(SoundEffects.select);
-      KeyManager.deactivate();
-      TimeManager.reserve({
-        [800]: () => {
-          KeyManager.activate();
-          props.resetPlayScene();
-        },
-      });
+      props.resetPlayScene();
     }
   } else if (isPaused.value) {
     if (KeyManager.isUp(inputKey)) {
