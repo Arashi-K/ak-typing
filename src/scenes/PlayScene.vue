@@ -216,10 +216,14 @@ const updateStatistics = () => {
   const levels = statistics.levels;
   const level = levels.find(level => level.level == currentPlayData.currentGameLevel.level);
   if (level != null) {
-    if (target.value.status == 'collect') level.clearCount += 1;
-    if (target.value.status == 'wrong') level.missCount += 1;
     level.totalGameTime += playTime.value;
-    level.minGameTime = Math.min(level.minGameTime ?? playTime.value, playTime.value);
+    if (target.value.status == 'collect') {
+      level.clearCount += 1;
+      level.minGameTime = Math.min(level.minGameTime ?? playTime.value, playTime.value);
+    }
+    if (target.value.status == 'wrong') {
+      level.missCount += 1;
+    }
   }
   currentPlayData.statistics = statistics;
 };
